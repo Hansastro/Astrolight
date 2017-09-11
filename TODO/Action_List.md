@@ -1,0 +1,13 @@
+First List of objectives:
+- Open and Read a FITS file
+- Write a FITS file
+- Convert a RAW image fo FITS
+- Change the white balance of an image
+- Read an SER file
+- Read an AVI file
+- Extract pictures from SER or AVI file
+- Make color correction of an image
+- Change the histogram and the tome curbe of an image
+- Make registration of some astrophotography
+- Add some exif information
+- Remove some exif information
