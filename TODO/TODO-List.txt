@@ -1,0 +1,7 @@
+Make a link to the documentation of:
+- OpenCV
+- Astropy
+- Python
+- FITS file format
+- Canon RAW file format
+- Astrometry.net
