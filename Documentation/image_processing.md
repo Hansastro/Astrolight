@@ -36,13 +36,27 @@ The flat images capture some defects in the optical path. Vigneting or dust on t
 ### Processing
 In command line and with image magick this operation is possible:
 
-    for i in FLAT*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
-    convert CORRECTED_FAT*.tif -evaluate-sequence median MasterFlat.tif
+    for i in FLAT*.tif; do echo $i; convert $i ./MasterOffset.tif -evaluate-sequence subtract CORRECTED_´basename $i´;done
+    convert CORRECTED_FLAT*.tif -evaluate-sequence median MasterFlat.tif
     
 ## Dark images
+The dark images (also called black) capture the noise of the camera during the long exposure. They are the less funny to get because the photos must have the same exposure than the target photos.
+
 ### How to get them?
+- put the cache on the camera.
+- take between 10 and 20 images with the ISO set to the target ISO and with the planned exposure time.
+- The camera must be at the same temperature as the one during the images. The noise is very dependent of the temperature.
+
 ### How to process all those images?
+It is the same process than the flat:
+- each images are substracted to the MasterOffset
+- a median is done with all resulting images
+
 ### Processing
+We follow the same process than for the Flat. In command line and with ImageMagick:
+
+    for i in DARK*.tif; do echo $i; convert $i ./MasterOffset.tif -evaluate-sequence subtract CORRECTED_´basename $i´;done
+    convert CORRECTED_BLACK*.tif -evaluate-sequence median MasterBlack.tif
 
 ## Processing the images
 ### How to get them?
