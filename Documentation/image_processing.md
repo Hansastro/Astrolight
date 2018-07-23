@@ -35,6 +35,7 @@ The flat images capture some defects in the optical path. Vigneting or dust on t
 
 ### Processing
 In command line and with image magick this operation is possible:
+
     for i in FLAT*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
     convert CORRECTED_FAT*.tif -evaluate-sequence median MasterFlat.tif
     
