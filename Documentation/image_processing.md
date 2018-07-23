@@ -19,7 +19,7 @@ You obtained: the MasterOffset.
 ### Processing
 With image magick the processing can be done with this command line:
 
-    convert OFFSET_*.tif -evaluate-sequence median Bias.tif
+    convert OFFSET_*.tif -evaluate-sequence median MasterOffset.tif
 
 ## Flat images
 The flat images capture some defects in the optical path. Vigneting or dust on the sensor for example.
@@ -30,8 +30,14 @@ The flat images capture some defects in the optical path. Vigneting or dust on t
 - take between 10 and 20 images of a uniformly enlighted surface. 
 
 ### How to process all those images?
-### Processing
+- each flat images has to be substracted with the MasterOffset.
+- a median is done with all resulting images
 
+### Processing
+In command line and with image magick this operation is possible:
+    for i in FLAT*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
+    convert CORRECTED_FAT*.tif -evaluate-sequence median MasterFlat.tif
+    
 ## Dark images
 ### How to get them?
 ### How to process all those images?
