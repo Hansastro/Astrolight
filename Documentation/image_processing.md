@@ -18,4 +18,14 @@ You obtain: the MasterOffset.
 ### Processing:
 With image magick the processing can be done with this command line:
 
-    convert IMG*.tif -evaluate-sequence median Bias.tif
+    convert OFFSET_*.tif -evaluate-sequence median Bias.tif
+
+## Flat images
+
+## Dark images
+
+## Processing the images
+
+### Aligning the images
+
+### merge all images
