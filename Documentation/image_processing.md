@@ -19,7 +19,7 @@ You obtained: the MasterOffset.
 ### Processing
 With image magick the processing can be done with this command line:
 
-    convert OFFSET_*.tif -evaluate-sequence median MasterOffset.tif
+    convert OFFSET_*.png -evaluate-sequence median MasterOffset.png
 
 ## Flat images
 The flat images capture some defects in the optical path. Vigneting or dust on the sensor for example.
@@ -36,8 +36,11 @@ The flat images capture some defects in the optical path. Vigneting or dust on t
 ### Processing
 In command line and with image magick this operation is possible:
 
-    for i in FLAT*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
-    convert CORRECTED_FLAT*.tif -evaluate-sequence median MasterFlat.tif
+    #for i in FLAT*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
+    #convert CORRECTED_FLAT*.tif -evaluate-sequence median MasterFlat.tif
+    
+    convert FLAT_*.png -evaluate-sequence median MasterFlat.png
+    composite MasterFlat.png -compose subtract MasterOffset.png MasterFlat_Corrected.png
     
 ## Dark images
 The dark images (also called black) capture the noise of the camera during the long exposure. They are the less funny to get because the photos must have the same exposure than the target photos.
@@ -55,8 +58,11 @@ It is the same process than the flat:
 ### Processing
 We follow the same process than for the Flat. In command line and with ImageMagick:
 
-    for i in DARK*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
-    convert CORRECTED_BLACK*.tif -evaluate-sequence median MasterBlack.tif
+    #for i in DARK*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
+    #convert CORRECTED_BLACK*.tif -evaluate-sequence median MasterBlack.tif
+    
+    convert DARK_*.png -evaluate-sequence median MasterDark.png
+    composite MasterDark.png -compose subtract MasterOffset.png MasterDark_Corrected.png
 
 ## Processing the images
 ### How to get them?
