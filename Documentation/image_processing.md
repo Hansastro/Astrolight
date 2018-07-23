@@ -69,6 +69,10 @@ We follow the same process than for the Flat. In command line and with ImageMagi
 ### How to process all those images?
 ### Processing
 
+    align_image_stack -v --gpu -a Aligned_ LIGHT_*
+    for i in Aligned_*.tif; do echo $i; convert ./MasterDark.png $i -evaluate-sequence subtract CORRECTED_$i;done
+    
+
 ### Aligning the images
 
 ### merge all images
