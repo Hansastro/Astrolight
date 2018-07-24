@@ -1,3 +1,4 @@
+# Under construction!
 # Astro image processing
 
 To process Astro Photographie several path are needed. Before compositing the images the offet, dark and flat must be treated.
@@ -32,8 +33,10 @@ The flat images capture some defects in the optical path. Vigneting or dust on t
 ### How to process all those images?
 - each flat images has to be substracted with the MasterOffset.
 - a median is done with all resulting images
+- The result must be normalized in oder to be multiply with the image. (all values between 0 and 1)
 
 ### Processing
+Image magick does not allow to prepare normalisation.
 In command line and with image magick this operation is possible:
 
     #for i in FLAT*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
@@ -67,6 +70,7 @@ We follow the same process than for the Flat. In command line and with ImageMagi
 ## Processing the images
 ### How to get them?
 ### How to process all those images?
+(Light - Dark - Offset)/(Flat)
 ### Processing
 
     align_image_stack -v --gpu -a Aligned_ LIGHT_*
