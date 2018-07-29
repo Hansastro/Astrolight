@@ -28,12 +28,13 @@ The flat images capture some defects in the optical path. Vigneting or dust on t
 ### How to get them?
 - Set the ISO as the planned one.
 - Set the aperture to the planned one
-- take between 10 and 20 images of a uniformly enlighted surface. 
+- take between 10 and 20 images of a uniformly enlighted surface.
+- The optical path must be identical to the one used for the images (same objectiv, same focal, same filters)
+- If several filter are used, several Flats have to be done.
 
 ### How to process all those images?
-- each flat images has to be substracted with the MasterOffset.
 - a median is done with all resulting images
-- The result must be normalized in oder to be multiply with the image. (all values between 0 and 1)
+- The result must be normalized in oder to be multiply with the image. (all values between 0.0000001 and 1)
 
 ### Processing
 Image magick does not allow to prepare normalisation.
@@ -55,11 +56,10 @@ The dark images (also called black) capture the noise of the camera during the l
 
 ### How to process all those images?
 It is the same process than the flat:
-- each images are substracted to the MasterOffset
 - a median is done with all resulting images
 
 ### Processing
-We follow the same process than for the Flat. In command line and with ImageMagick:
+In command line and with ImageMagick:
 
     #for i in DARK*.tif; do echo $i; convert ./MasterOffset.tif $i -evaluate-sequence subtract CORRECTED_´basename $i´;done
     #convert CORRECTED_BLACK*.tif -evaluate-sequence median MasterBlack.tif
@@ -69,8 +69,12 @@ We follow the same process than for the Flat. In command line and with ImageMagi
 
 ## Processing the images
 ### How to get them?
+Make an exposure of images with the same ISO, focal, aperture and exposure time than the one used to prepare the master files.
+
 ### How to process all those images?
-(Light - Dark - Offset)/(Flat)
+Process the following operation:
+(Light - MasterDark - MasterOffset)/(MasterFlat)
+
 ### Processing
 
     align_image_stack -v --gpu -a Aligned_ LIGHT_*
