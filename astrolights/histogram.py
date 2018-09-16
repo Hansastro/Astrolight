@@ -16,20 +16,6 @@ def ajustWhiteBalance(BGR_image):
     - the corrected image
     '''
 
-    def cut(e):
-        if e < 0:
-            return 0
-        elif e > 65535:
-            return 65535
-        else:
-            return e
-
-    def cutRow(r):
-        vfunc = np.vectorize(cut)
-        r = vfunc(r)
-        return r
-
-
     blue, green, red = cv2.split(BGR_image)
 
     # Calculates the mean of each channel
@@ -45,22 +31,21 @@ def ajustWhiteBalance(BGR_image):
     newGreen = green + (overallMean - greenMean)
     newRed = red + (overallMean - redMean)
 
-    # Transform the data in pandas dataframes
-    newBlue_df = pd.DataFrame(newBlue)
-    newGreen_df = pd.DataFrame(newGreen)
-    newRed_df = pd.DataFrame(newRed)
-    
     # cut the values to have only a 16bits bitdepth.
-    newBlue_cut = newBlue_df.apply(cutRow).values
-    newGreen_cut = newGreen_df.apply(cutRow).values
-    newRed_cut = newRed_df.apply(cutRow).values
+    newBlue[newBlue < 0] = 0
+    newBlue[newBlue > 65535] = 65535
+    newGreen[newGreen < 0] = 0
+    newGreen[newGreen > 65535] = 65535
+    newRed[newRed < 0] = 0
+    newRed[newRed > 65535] = 65535
+
 
     # Remerge the 3 channels in one image
-    newImage = cv2.merge((newBlue_cut, newGreen_cut, newRed_cut))
+    newImage = cv2.merge((newBlue, newGreen, newRed))
 
     return newImage
 
-def normalizeHistogram(BGR_image, methode='statisitc'):
+def normalizeHistogram(BGR_image, methode='statistic', sigma=3, sigma1=None, sigma2=None):
     '''
     Normalize the histogram of an image
     '''
@@ -78,10 +63,13 @@ def normalizeHistogram(BGR_image, methode='statisitc'):
     lab_image = cv2.cvtColor(BGR_image, cv2.COLOR_BGR2LAB);
     l, a, b = cv2.split(lab_image)
 
-    sigmaMult = 3
+    if sigma1 == None:
+        sigma1 = sigma
+    if sigma2 == None:
+        sigma2 = sigma
     dataMean = l.mean()
     dataStd = l.std()
-    normalizationRange = (dataMean - dataStd*sigmaMult, dataMean + dataStd*sigmaMult)
+    normalizationRange = (dataMean - dataStd*sigma1, dataMean + dataStd*sigma2)
     res = np.array([[process(elem, normalizationRange) for elem in line] for line in l])
     res = res - res.min()
     res = res * 100/res.max()
@@ -91,3 +79,35 @@ def normalizeHistogram(BGR_image, methode='statisitc'):
     BGR_image *= 2**16 - 1
 
     return BGR_image
+
+def shiftHistorgram(BGR_image, shift):
+    '''
+    Shift the histogram
+
+    parameters:
+    shift: single value or list of 3 values one for each channel
+    
+    returns:
+    a GBR image with shifted histogram
+    '''
+    
+    B, G, R = cvs.split(BGR_image)
+    if len(shift) == 3:
+        B += shift[0]
+        G += shift[1]
+        R += shift[2]
+    else:
+        B += shift
+        G += shift
+        R += shift
+
+    B[B<0] = 0
+    B[B>65535] = 65535
+    G[G<0] = 0
+    G[G>65535] = 65535
+    R[R<0] = 0
+    R[R>65535] = 65535
+    
+    return cv2.merge((B, G, R))
+    
+    

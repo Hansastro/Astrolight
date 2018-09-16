@@ -16,9 +16,9 @@ def correctImages(RawImage, masterOffset, masterDark, masterFlat):
     masterDark = masterDark.astype(np.float64, copy=False)
     masterOffset = masterOffset.astype(np.float64, copy=False)
     masterFlat = masterFlat.astype(np.float64, copy=False)
-    
     image = RAWimageData.astype(np.float64, copy=False)
-    image = (image - masterDark) / (masterFlat - masterOffset) * meanFlat
+
+    image = ((image - masterDark) / (masterFlat - masterOffset)) * meanFlat
         
     return image
 
